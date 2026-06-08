@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Booker.API/Booker.API.csproj" />
+  <Project Path="Booker.Core/Booker.Core.csproj" />
+  <Project Path="Booker.Infrastructure/Booker.Infrastructure.csproj" />
+  <Project Path="Booker.Tests/Booker.Tests.csproj" />
+</Solution>
