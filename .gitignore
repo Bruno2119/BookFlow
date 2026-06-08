@@ -1,1 +1,31 @@
+# ficheiros a ignorar
 AI_CONTEXT.md
+
+# dependências (frontend/backend Node)
+node_modules/
+
+# builds
+dist/
+build/
+
+# logs
+*.log
+
+# ambiente (chaves, passwords)
+.env
+.env.local
+.env.*.local
+
+# Windows / Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+
+# backend (ASP.NET / C# se aplicável)
+bin/
+obj/
+
+# cache
+.DS_Store
+Thumbs.db
