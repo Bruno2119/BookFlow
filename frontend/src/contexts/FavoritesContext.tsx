@@ -25,12 +25,12 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         } catch (error) {
           console.error('Error loading favorites from API', error);
           // Fallback to local storage if API fails
-          const saved = localStorage.getItem('booker_favorites');
+          const saved = localStorage.getItem('bookflow_favorites');
           if (saved) setFavorites(JSON.parse(saved));
         }
       } else {
         // Guest mode: load from localStorage
-        const saved = localStorage.getItem('booker_favorites');
+        const saved = localStorage.getItem('bookflow_favorites');
         if (saved) {
           try {
             setFavorites(JSON.parse(saved));
@@ -49,7 +49,7 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Save guest favorites to localStorage
   useEffect(() => {
     if (!user) {
-      localStorage.setItem('booker_favorites', JSON.stringify(favorites));
+      localStorage.setItem('bookflow_favorites', JSON.stringify(favorites));
     }
   }, [favorites, user]);
 

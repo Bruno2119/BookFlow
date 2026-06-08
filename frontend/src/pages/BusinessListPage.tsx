@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import api from '../lib/api';
 import type { Business } from '../types/business';
 import BusinessCard from '../components/BusinessCard';
-import { Search, Loader2 } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { motion } from 'framer-motion';
 
 interface BusinessListPageProps {
   onSelectBusiness: (id: number) => void;
@@ -38,47 +39,95 @@ export default function BusinessListPage({ onSelectBusiness }: BusinessListPageP
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
-  return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      <div className="bg-gradient-to-r from-primary/10 to-transparent p-8 rounded-3xl border border-primary/20 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-foreground tracking-tight">Explorar Estabelecimentos</h1>
-          <p className="text-muted-foreground mt-1 font-medium">Encontra os melhores barbeiros e serviços perto de ti.</p>
-        </div>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
 
-        <div className="relative w-full md:w-80">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Procurar por nome ou morada..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white border-none rounded-2xl py-3 pl-11 pr-4 shadow-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm font-medium"
-          />
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  return (
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-12 pb-20"
+    >
+      <div className="relative overflow-hidden bg-primary rounded-[3rem] p-12 shadow-premium">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
+        
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+          <div className="max-w-xl">
+            <motion.h1 
+              variants={itemVariants}
+              className="text-5xl font-display font-bold text-white tracking-tighter"
+            >
+              Descubra o seu próximo momento.
+            </motion.h1>
+            <motion.p 
+              variants={itemVariants}
+              className="text-white/80 mt-4 text-lg font-medium leading-relaxed"
+            >
+              Explore os melhores estabelecimentos da rede BookFlow e agende serviços de elite com facilidade.
+            </motion.p>
+          </div>
+
+          <motion.div 
+            variants={itemVariants}
+            className="relative w-full lg:w-[400px]"
+          >
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40">
+              <Search className="h-full w-full" />
+            </div>
+            <input
+              type="text"
+              placeholder="Nome, categoria ou morada..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl py-5 pl-14 pr-6 text-white placeholder:text-white/40 focus:bg-white/20 focus:ring-2 focus:ring-white/20 outline-none transition-all font-bold text-sm shadow-2xl"
+            />
+          </motion.div>
         </div>
       </div>
 
       {filteredBusinesses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div 
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {filteredBusinesses.map(business => (
-            <BusinessCard 
-              key={business.id} 
-              business={business} 
-              onSelect={onSelectBusiness} 
-            />
+            <motion.div key={business.id} variants={itemVariants}>
+              <BusinessCard 
+                business={business} 
+                onSelect={onSelectBusiness} 
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       ) : (
-        <div className="text-center py-20 bg-muted/20 rounded-3xl border-2 border-dashed border-border">
-          <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-20" />
-          <p className="text-muted-foreground font-medium">Nenhum estabelecimento encontrado com esses critérios.</p>
-        </div>
+        <motion.div 
+          variants={itemVariants}
+          className="text-center py-32 bg-muted/20 rounded-[3rem] border-2 border-dashed border-border/50"
+        >
+          <div className="h-20 w-20 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Search className="h-8 w-8 text-muted-foreground/30" />
+          </div>
+          <h3 className="text-xl font-display font-bold text-foreground/60">Sem resultados encontrados</h3>
+          <p className="text-muted-foreground mt-2 font-medium">Tente ajustar os seus termos de pesquisa.</p>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }

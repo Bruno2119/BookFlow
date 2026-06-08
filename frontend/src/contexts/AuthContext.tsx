@@ -16,26 +16,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('booker_token');
-    const savedUser = localStorage.getItem('booker_user');
+    const savedToken = localStorage.getItem('bookflow_token');
+    const savedUser = localStorage.getItem('bookflow_user');
     if (savedToken && savedUser) {
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
     }
   }, []);
 
-  const login = (newToken: string, newUser: User) => {
+  const login = (newToken: string, newUser: any) => {
     setToken(newToken);
     setUser(newUser);
-    localStorage.setItem('booker_token', newToken);
-    localStorage.setItem('booker_user', JSON.stringify(newUser));
+    localStorage.setItem('bookflow_token', newToken);
+    localStorage.setItem('bookflow_user', JSON.stringify(newUser));
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('booker_token');
-    localStorage.removeItem('booker_user');
+    localStorage.removeItem('bookflow_token');
+    localStorage.removeItem('bookflow_user');
   };
 
   return (

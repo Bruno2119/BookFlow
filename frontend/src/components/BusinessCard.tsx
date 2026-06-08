@@ -1,9 +1,10 @@
-import { MapPin, Phone, ArrowRight, Heart } from "lucide-react";
+import { motion } from "framer-motion";
+import { MapPin, Phone, ArrowRight, Heart, Star } from "lucide-react";
 import type { Business } from "../types/business";
 import { useFavorites } from "../contexts/FavoritesContext";
 
 interface BusinessCardProps {
-  business: Business;
+  business: any; // Allow for extra fields like imagemUrl
   onSelect: (id: number) => void;
 }
 
@@ -12,43 +13,62 @@ export default function BusinessCard({ business, onSelect }: BusinessCardProps) 
   const favorited = isFavorite(business.id);
 
   return (
-    <div className="bg-card rounded-2xl border border-border shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden group relative">
-      <div className="h-32 bg-gradient-to-br from-primary/20 to-primary/5 relative">
-        <div className="absolute -bottom-6 left-6 w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold shadow-lg">
-          {business.nome.charAt(0)}
-        </div>
+    <motion.div 
+      whileHover={{ y: -8 }}
+      className="bg-card rounded-[2rem] border border-border/50 shadow-card hover:shadow-premium transition-all duration-500 overflow-hidden group relative flex flex-col h-full"
+    >
+      <div className="h-48 relative overflow-hidden">
+        <img 
+          src={business.imagemUrl || `https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop`} 
+          alt={business.nome}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
         
+        <div className="absolute top-4 left-4">
+          <span className="bg-white/90 backdrop-blur-md text-primary text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
+            {business.categoria || "Serviço"}
+          </span>
+        </div>
+
         <button 
           onClick={(e) => {
             e.stopPropagation();
             toggleFavorite(business.id);
           }}
-          className={`absolute top-4 right-4 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${
+          className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md transition-all duration-300 ${
             favorited 
               ? 'bg-red-500 text-white shadow-lg scale-110' 
-              : 'bg-white/50 text-muted-foreground hover:bg-white hover:text-red-500'
+              : 'bg-black/20 text-white hover:bg-white hover:text-red-500'
           }`}
         >
           <Heart className={`h-4 w-4 ${favorited ? 'fill-current' : ''}`} />
         </button>
+
+        <div className="absolute bottom-4 left-4 flex items-center gap-1.5">
+           <div className="flex items-center gap-1 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10">
+              <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
+              <span className="text-[10px] font-bold text-white">4.9</span>
+           </div>
+        </div>
       </div>
       
-      <div className="p-6 pt-10 space-y-4">
-        <div>
-          <h3 className="text-xl font-display font-bold text-foreground group-hover:text-primary transition-colors">
+      <div className="p-8 flex flex-col flex-1">
+        <div className="mb-6">
+          <h3 className="text-xl font-display font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
             {business.nome}
           </h3>
-          <p className="text-sm text-muted-foreground line-clamp-2 mt-1 min-h-[40px]">
-            {business.descricao || "Sem descrição disponível."}
+          <p className="text-sm text-muted-foreground line-clamp-2 mt-2 font-medium leading-relaxed">
+            {business.descricao || "Um espaço dedicado ao seu bem-estar e estilo, com profissionais qualificados."}
           </p>
         </div>
 
-        <div className="space-y-2 pt-2 border-t border-border">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+        <div className="space-y-2.5 mt-auto pt-6 border-t border-border/50">
+          <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-bold uppercase tracking-wider">
             <MapPin className="h-3.5 w-3.5 text-primary" />
             <span className="truncate">{business.endereco}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+          <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-bold uppercase tracking-wider">
             <Phone className="h-3.5 w-3.5 text-primary" />
             <span>{business.telefone}</span>
           </div>
@@ -56,12 +76,12 @@ export default function BusinessCard({ business, onSelect }: BusinessCardProps) 
 
         <button
           onClick={() => onSelect(business.id)}
-          className="w-full mt-2 bg-muted/50 hover:bg-primary hover:text-white text-foreground py-3 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 group/btn"
+          className="w-full mt-8 bg-primary text-white py-4 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
         >
-          Ver Serviços e Marcar
+          Explorar Serviços
           <ArrowRight className="h-4 w-4 transform group-hover/btn:translate-x-1 transition-transform" />
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

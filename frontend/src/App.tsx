@@ -63,9 +63,8 @@ function App() {
           />
         ) : (
           <div className="bg-card p-10 rounded-3xl shadow-elevated w-[400px] border border-border animate-in fade-in zoom-in duration-500">
-            <div className="text-center mb-10">
-              <h1 className="text-4xl font-display font-bold text-primary tracking-tight">Booker</h1>
-              <p className="text-muted-foreground mt-2 font-medium">Faça login para gerir o seu estabelecimento</p>
+            <div className="flex flex-col items-center text-center mb-10">
+              <img src="/bookflow_bigger_text.png" alt="BookFlow" className="h-56 w-auto object-contain mb-2" />
             </div>
             
             <form onSubmit={handleLogin} className="space-y-6">
@@ -117,7 +116,7 @@ function App() {
               <div className="grid grid-cols-2 gap-2 text-[10px]">
                 <div className="bg-muted/30 p-2 rounded-xl border border-border/50">
                   <span className="block font-bold text-primary">Admin</span>
-                  <span className="text-foreground">admin@booker.pt</span>
+                  <span className="text-foreground">admin@bookflow.pt</span>
                 </div>
                 <div className="bg-muted/30 p-2 rounded-xl border border-border/50">
                   <span className="block font-bold text-primary">Cliente</span>
